@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Перерисовка баннера в слои - демо</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@800;900&family=Share+Tech+Mono&family=Manrope:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#1e1e1e;--panel:#2b2b2b;--ink:#e8e8e8;--muted:#a0a0a0;--line:#3a3a3a;--acc:#31a8ff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:Manrope,Arial,sans-serif;line-height:1.5}
+.bar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 18px;background:#141414;border-bottom:1px solid var(--line);font-size:14px;flex-wrap:wrap}
+.bar b{font-weight:800}.bar span{color:var(--muted)}
+.app{display:grid;grid-template-columns:1fr 320px;min-height:calc(100vh - 46px)}
+@media(max-width:1000px){.app{grid-template-columns:1fr}}
+.canvas{display:grid;place-items:center;padding:24px;background:repeating-conic-gradient(#232323 0 25%,#1c1c1c 0 50%) 0 0/24px 24px}
+.art{width:100%;max-width:1344px;aspect-ratio:1344/768;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.art svg{width:100%;height:100%;display:block}
+aside{background:var(--panel);border-left:1px solid var(--line);display:flex;flex-direction:column}
+.ph{padding:10px 14px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--line);background:#262626}
+.layers{list-style:none}
+.layers li{display:flex;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid #333;font-size:14px;cursor:pointer;user-select:none}
+.layers li:hover{background:#333}
+.layers li .eye{width:18px;text-align:center;color:var(--ink)}
+.layers li.off .eye{opacity:.25}.layers li.off{color:#777}
+.layers li .k{width:26px;height:18px;border:1px solid #555;border-radius:2px;display:grid;place-items:center;font:700 10px Manrope;color:#aaa;flex:none}
+.layers li.sel{background:#3d4b5c}
+.props{padding:14px;display:flex;flex-direction:column;gap:10px;border-top:1px solid var(--line)}
+.props label{font-size:12px;color:var(--muted);font-weight:700}
+.props input{width:100%;font:500 14px 'Share Tech Mono';padding:9px 10px;border-radius:4px;border:1px solid #444;background:#1e1e1e;color:var(--ink)}
+.props input:focus{outline:0;border-color:var(--acc)}
+.cols{display:flex;gap:8px}.cols input[type=color]{width:44px;height:36px;padding:2px}
+.dl{margin:14px;border:0;border-radius:6px;padding:12px;font:800 14px Manrope;background:var(--acc);color:#04121f;cursor:pointer}
+.note{padding:0 14px 16px;font-size:12px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="bar"><b>FREQ.01_analyzer.psd @ 100% (RGB/8)</b><span>Демо: картинка перерисована слоями - любой текст и цвет меняются, качество не теряется</span></div>
+<div class="app">
+ <div class="canvas"><div class="art"><svg id="svg" viewBox="0 0 1344 768" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+   <filter id="glow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1.6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+   <filter id="glow2"><feGaussianBlur stdDeviation="8"/></filter>
+   <linearGradient id="spec" x1="0" x2="1"><stop offset="0" stop-color="#3ddc3d"/><stop offset=".45" stop-color="#9be22d"/><stop offset=".62" stop-color="#e3d21f"/><stop offset=".8" stop-color="#f0a21a"/><stop offset="1" stop-color="#e88a12"/></linearGradient>
+   <linearGradient id="fillg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5fd02a" stop-opacity=".22"/><stop offset="1" stop-color="#5fd02a" stop-opacity="0"/></linearGradient>
+   <radialGradient id="vig" cx=".5" cy=".5" r=".75"><stop offset=".6" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".85"/></radialGradient>
+  </defs>
+  <g id="L-bg"><rect width="1344" height="768" fill="#060806"/><rect x="26" y="22" width="1292" height="724" rx="36" fill="#0a0d0a"/></g>
+  <g id="L-grid" stroke="#1d3a1d" stroke-width="1"></g>
+  <g id="L-scale" font-family="Share Tech Mono" font-size="17" fill="#3fbf3f"></g>
+  <g id="L-spec"><path id="sfill" fill="url(#fillg)"/><path id="sglow" fill="none" stroke="url(#spec)" stroke-width="6" opacity=".45" filter="url(#glow2)"/><path id="sline" fill="none" stroke="url(#spec)" stroke-width="2.2"/></g>
+  <g id="L-title" font-family="Orbitron" font-weight="900" font-size="76" filter="url(#glow)"><text x="62" y="118"><tspan id="t1" fill="#2bd42b">FREQ.</tspan><tspan id="t2" fill="#f0a21a">01</tspan></text></g>
+  <g id="L-info" font-family="Share Tech Mono" fill="#4fd14f"><text id="sub" x="64" y="156" font-size="21" letter-spacing="1">LIVE DJ SET / STREAM</text><rect x="64" y="180" width="44" height="2" fill="#4fd14f"/>
+   <text x="64" y="216" font-size="16" id="ch">CH: 01  SCALE: LOG</text><text x="64" y="238" font-size="16" id="ref">REF: -12.0 dB</text>
+   <circle cx="1192" cy="56" r="6" fill="#2bd42b"/><text x="1210" y="62" font-size="17" id="sys">SYS. 01</text></g>
+  <g id="L-hud" font-family="Share Tech Mono" fill="#3fbf3f" font-size="13"><rect x="64" y="680" width="46" height="44" fill="none" stroke="#2c6a2c"/><path d="M76 712l10-14 6 8 8-12" stroke="#3fbf3f" fill="none"/>
+   <text x="128" y="690">MODE: ANALYZER</text><text x="128" y="707">RES:  1/12 OCT</text><text x="128" y="724">TGT:  -12.0 dB</text><g id="meter"></g></g>
+  <g id="L-tag"><rect x="1003" y="694" width="278" height="32" fill="none" stroke="#3fbf3f" stroke-width="1.5"/><text id="tag" x="1142" y="716" text-anchor="middle" font-family="Share Tech Mono" font-size="18" letter-spacing="2" fill="#4fd14f">MINIMAL / DEEP / TECH</text></g>
+  <rect id="L-vig" width="1344" height="768" fill="url(#vig)" pointer-events="none"/>
+ </svg></div></div>
+ <aside>
+  <div class="ph">Слои</div>
+  <ul class="layers" id="layers"></ul>
+  <div class="ph">Свойства текста</div>
+  <div class="props">
+   <label>Заголовок</label><div class="cols"><input id="i1" value="FREQ."><input type="color" id="c1" value="#2bd42b"></div>
+   <div class="cols"><input id="i2" value="01"><input type="color" id="c2" value="#f0a21a"></div>
+   <label>Подзаголовок</label><input id="i3" value="LIVE DJ SET / STREAM">
+   <label>Плашка</label><input id="i4" value="MINIMAL / DEEP / TECH">
+   <label>Статус</label><input id="i5" value="SYS. 01">
+  </div>
+  <button class="dl" id="dl">Экспорт PNG 2688×1536</button>
+  <p class="note">В работе сдаю PSD: фон и спектр - отдельные слои и смарт-объекты, все надписи - живой текст со шрифтами в комплекте. Остальные 4 баннера - так же, идентично исходникам.</p>
+ </aside>
+</div>
+<script>
+const NS='http://www.w3.org/2000/svg',$=id=>document.getElementById(id);
+// сетка и шкалы
+const X0=64,X1=1226,Y0=146,Y1=578;const g=$('L-grid'),sc=$('L-scale');
+const fx=[20,50,100,200,500,1000,2000,5000,10000,20000],lab=['20','50','100','200','500','1K','2K','5K','10K','20K'];
+const lx=f=>X0+(Math.log10(f)-Math.log10(16))/(Math.log10(32000)-Math.log10(16))*(X1-X0);
+function el(n,a,p){const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);(p||g).appendChild(e);return e}
+fx.forEach((f,i)=>{el('line',{x1:lx(f),y1:90,x2:lx(f),y2:Y1+14,'stroke-dasharray':'2 4'});el('text',{x:lx(f),y:620,'text-anchor':'middle'},sc).textContent=lab[i]});
+el('text',{x:1212,y:620,'text-anchor':'middle'},sc).textContent='Hz';
+for(let k=0;k<=10;k++){const y=Y0+k*(Y1-Y0)/10;el('line',{x1:X0,y1:y,x2:X1,y2:y,'stroke-dasharray':k===5?'':'2 4',stroke:k===5?'#2a5a2a':'#1d3a1d'});el('text',{x:1262,y:y+6,'text-anchor':'end'},sc).textContent=k?('-'+k*6):'0';el('line',{x1:X1,y1:y,x2:X1+8,y2:y,stroke:'#3fbf3f'},sc)}
+el('line',{x1:X1,y1:Y0,x2:X1,y2:Y1+14,stroke:'#2a5a2a'});el('line',{x1:X0,y1:652,x2:1282,y2:652,stroke:'#1d3a1d'});
+el('path',{d:'M44 368l9 5-9 5z',fill:'#3fbf3f'},sc);el('path',{d:'M1282 146l-9-5v10z',fill:'#3fbf3f'},sc);
+// спектр: огибающая + пики как в исходнике
+let s=9;const r=()=>(s=(s*16807)%2147483647)/2147483647;
+const peaks=[[160,.98],[230,.97],[130,.8],[115,.7],[98,.62],[1000,.85],[700,.65],[850,.6],[2400,.72],[2800,.58],[400,.55],[300,.62],[5200,.46],[8000,.42],[3500,.5]];
+function db(f){const lf=Math.log10(f);let v=-32+Math.max(0,(lf-1.6))*4-Math.max(0,lf-3.2)*16+Math.exp(-Math.pow((lf-2.3)/.35,2))*6;
+ peaks.forEach(([pf,a])=>{const d=(lf-Math.log10(pf))/.012;v+=a*22*Math.exp(-d*d/2)});v+=Math.sin(lf*190)*1.6+Math.sin(lf*71)*1.2;return v}
+const yy=v=>Y0+(-v)/60*(Y1-Y0);let d='';const pts=[];
+for(let i=0;i<=900;i++){const f=20*Math.pow(10,i/900*Math.log10(1000));const x=lx(f),y=yy(db(f)+(r()-.5)*1.4);pts.push([x,y]);d+=(i?'L':'M')+x.toFixed(1)+' '+y.toFixed(1)}
+$('sline').setAttribute('d',d);$('sglow').setAttribute('d',d);$('sfill').setAttribute('d',d+`L${pts.at(-1)[0]} ${Y1}L${pts[0][0]} ${Y1}Z`);
+// индикатор уровня
+const m=$('meter');['-48','-24','-12','-6','0'].forEach((t,i)=>el('text',{x:322+i*54,y:704,'text-anchor':'middle'},m).textContent=t);
+el('path',{d:'M424 680l5 8 5-8z',fill:'#3fbf3f'},m);for(let i=0;i<19;i++)el('rect',{x:298+i*13,y:713,width:9,height:10,fill:i<14?'#3fbf3f':i<17?'#c9c21f':'#f0a21a'},m);
+// панель слоёв
+const L=[['L-vig','Виньетка','FX'],['L-tag','Плашка жанра','T'],['L-hud','HUD: режим и уровень','▦'],['L-info','Инфо-текст','T'],['L-title','Заголовок FREQ.01','T'],['L-spec','Спектр (смарт-объект)','◩'],['L-scale','Шкалы dB / Hz','T'],['L-grid','Сетка','▦'],['L-bg','Фон','▭']];
+$('layers').innerHTML=L.map(l=>`<li data-id="${l[0]}"><span class="eye">👁</span><span class="k">${l[2]}</span>${l[1]}</li>`).join('');
+$('layers').onclick=e=>{const li=e.target.closest('li');if(!li)return;li.classList.toggle('off');$(li.dataset.id).style.display=li.classList.contains('off')?'none':''};
+// свойства
+const bind=(i,fn)=>$(i).oninput=e=>fn(e.target.value);
+bind('i1',v=>$('t1').textContent=v);bind('i2',v=>$('t2').textContent=v);bind('c1',v=>$('t1').setAttribute('fill',v));bind('c2',v=>$('t2').setAttribute('fill',v));
+bind('i3',v=>$('sub').textContent=v);bind('i4',v=>$('tag').textContent=v);bind('i5',v=>$('sys').textContent=v);
+// экспорт
+$('dl').onclick=async()=>{await document.fonts.ready;const svg=$('svg').cloneNode(true);
+ const css=[...document.styleSheets].map(()=>'' ).join('');svg.setAttribute('width',2688);svg.setAttribute('height',1536);
+ const url='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(new XMLSerializer().serializeToString(svg));const im=new Image();
+ im.onload=()=>{const c=document.createElement('canvas');c.width=2688;c.height=1536;c.getContext('2d').drawImage(im,0,0,2688,1536);const a=document.createElement('a');a.download='FREQ01_analyzer.png';a.href=c.toDataURL('image/png');a.click()};im.src=url};
+</script>
+</body>
+</html>
